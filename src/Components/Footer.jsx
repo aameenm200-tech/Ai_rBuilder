@@ -15,11 +15,11 @@ function Footer() {
       <div className="col-lg-4"></div>
       <div className="col-lg-4 ">
         <h4 className='mb-4'>Contact Us</h4>
-        <p> <MdEmail/> airbuilder@gmail.com</p>
-        <p> <FaPhoneAlt/> 0123456789</p>
+        <p> <MdEmail className='fs-3'/> airbuilder@gmail.com</p>
+        <p> <FaPhoneAlt className='fs-3'/> 0123456789</p>
         <h4>Connect With Us</h4>
         <div className='fs-2'>
-          <FaInstagram />
+          <FaInstagram  />
           <FaFacebook className='mx-3'/>
           <FaXTwitter />
         </div>
