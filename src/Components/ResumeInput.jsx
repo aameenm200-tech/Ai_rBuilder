@@ -5,6 +5,12 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { TextField } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 
 const steps = ['Basic Informations', 'Contact Details', 'Education Details', 'Review & Submit'];
 
@@ -26,12 +32,36 @@ switch (stepCount) {
   case 0: return(
     <div>
       <h3>Personal details</h3>
+      <div className='row p-3'>
+       <TextField  id="standard-basic-fullname" label="Full Name" variant="standard" />
+       <TextField  id="standard-basic-loc" label="Location" variant="standard" />
+
+        <FormControl variant="standard">
+        <InputLabel id="demo-simple-select-label">Choose Job Title</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="job"
+        >
+          <MenuItem value={'job'}>job</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+       </div>
     </div>
+   
   ) 
     break;
       case 1: return(
     <div>
       <h3>Contact Details</h3>
+      <div className="row p-3">
+         <TextField className='' id="standard-basic-email" label="Email" variant="standard" />
+       <TextField className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
+        <TextField className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
+       <TextField className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
+      </div>
     </div>
   ) 
     break;
@@ -39,6 +69,11 @@ switch (stepCount) {
       case 2: return(
     <div>
       <h3>Educational Details</h3>
+      <div className="row p-3">
+        <TextField className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
+        <TextField className='' id="standard-basic-college" label="University/College Name" variant="standard" />
+       <TextField className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
+      </div>
     </div>
   ) 
     break;

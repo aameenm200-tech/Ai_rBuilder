@@ -6,7 +6,7 @@ import { MdEmail } from 'react-icons/md'
 
 function Footer() {
   return (
-    <div style={{backgroundColor:'#564e3b',height:'350px'}} className='container-fluid text-light p-5'>
+    <div style={{backgroundColor:'#564e3b',height:'100%',}} className='container-fluid text-light p-5'>
      <div className="row">
       <div className="col-lg-4">
         <h4 className='mb-4'>AI rBuilder</h4>

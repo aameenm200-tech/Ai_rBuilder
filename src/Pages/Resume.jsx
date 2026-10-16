@@ -12,7 +12,7 @@ function Resume() {
         <div className="container">
           <div className="row mt-5">
             <div className="col-lg-1"></div>
-            <div className="col-lg-4 rounded shadow p-5 text-center">
+            <div className="col-lg-4 rounded-5 shadow p-5 text-center">
               <IoDocument style={{ fontSize: '40px' }} className='text-primary mb-3' />
               <h4>Add Your Details </h4>
               <p>Our AI wil generate Skills & summary</p>
@@ -20,7 +20,7 @@ function Resume() {
 
             </div>
             <div className="col-lg-2"></div>
-            <div className="col-lg-4 rounded shadow p-5 text-center">
+            <div className="col-lg-4 rounded-5 shadow p-5 text-center">
               <FaFileDownload style={{ fontSize: '40px' }} className=' text-danger mb-3' />
               <h4>Download Your Resume </h4>
               <p>Download PDF and start applying</p>
@@ -30,7 +30,7 @@ function Resume() {
           </div>
         </div>
         <div className="text-center mt-4">
-          <Link to={'/resume-details'} className='btn text-light'  style={{ backgroundColor: '#a5a37d' }}>Let's Start</Link>
+          <Link to={'/resume-details'} className='btn text-light p-3 fs-6'  style={{ backgroundColor: '#a5a37d' }}>Let's Start</Link>
         </div>
 
       </div>
