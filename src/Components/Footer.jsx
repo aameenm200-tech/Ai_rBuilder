@@ -25,7 +25,7 @@ function Footer() {
         </div>
       </div>
      </div>
-    <h4 className='text-center mt-3'> Designed & built with ❤️ using React</h4>
+    <h4 className='text-center mt-4'> Designed & built with ❤️ using React</h4>
     </div>
   )
 }

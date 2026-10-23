@@ -9,6 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { IoIosCloseCircle } from "react-icons/io";
 
 const style = {
   position: 'absolute',
@@ -16,6 +17,8 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 700,
+  maxHeight:'80vh',
+  overflowY:'auto',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -28,7 +31,7 @@ function Edit() {
   const handleClose = () => setOpen(false);
   return (
     <div>
-      <button style={{ backgroundColor: '#a5a37d', color: '' }} className='btn mx-2' onClick={handleOpen}><FaRegEdit /> Edit CV</button>
+      <button style={{ backgroundColor: '#a5a37d' }} className='btn mx-2' onClick={handleOpen}><FaRegEdit className='fs-4' /> Edit CV</button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -62,15 +65,45 @@ function Edit() {
               </div>
             </div>
             {/* contact Details */}
-             <div>
-                  <h3>Contact Details</h3>
-                  <div className="row p-3">
-                     <TextField className='' id="standard-basic-email" label="Email" variant="standard" />
-                   <TextField className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
-                    <TextField className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
-                   <TextField className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
-                  </div>
-                </div>
+            <div>
+              <h3>Contact Details</h3>
+              <div className="row p-3">
+                <TextField className='' id="standard-basic-email" label="Email" variant="standard" />
+                <TextField className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
+                <TextField className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
+                <TextField className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
+              </div>
+            </div>
+            {/* education details */}
+            <div>
+              <h3>Educational Details</h3>
+              <div className="row p-3">
+                <TextField className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
+                <TextField className='' id="standard-basic-college" label="University/College Name" variant="standard" />
+                <TextField className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
+              </div>
+            </div>
+            {/* skills */}
+            <div>
+              <h3>Skills</h3>
+              <div className='d-flex'>
+                <input type="text" placeholder='Add Skills' className='form-control' />
+                <button className=' btn w-25 mx-2 text-primary '>ADD</button>
+              </div>
+              <h5 className='my-3'>Added Skills </h5>
+              <div className="d-flex justify-content-between flex-wrap">
+                <Button style={{ backgroundColor: '#a5a37d' }}  variant='contained'>Skills <IoIosCloseCircle className='ms-2 fs-4' /></Button>
+              </div>
+            </div>
+            {/* summary */}
+            <div>
+              <h3 className='mt-2'>Summary</h3>
+              <div className='row p-3'>
+                <TextField id='summary' variant='standard' label='summary'></TextField>
+              </div>
+            </div>
+            {/* update button */}
+            <button className='btn btn-success mt-3'>Update CV</button>
           </Box>
         </Box>
       </Modal>
