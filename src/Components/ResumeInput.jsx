@@ -10,11 +10,20 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import jobRole from '../assets/jobRole.json'
+import jobSkills from '../assets/jobSkills.json'
+import summaries from '../assets/summaries.json'
 
 
 const steps = ['Basic Informations', 'Contact Details', 'Education Details', 'Review & Submit'];
 
-function ResumeInput() {
+
+
+
+function ResumeInput({resumeDetails, setResumeDetails}) {
+
+
+  console.log(resumeDetails);
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -26,70 +35,80 @@ function ResumeInput() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-const renderFormCount = (stepCount)=>{
+  const renderFormCount = (stepCount) => {
 
-switch (stepCount) {
-  case 0: return(
-    <div>
-      <h3>Personal details</h3>
-      <div className='row p-3'>
-       <TextField  id="standard-basic-fullname" label="Full Name" variant="standard" />
-       <TextField  id="standard-basic-loc" label="Location" variant="standard" />
+    switch (stepCount) {
+      case 0: return (
+        <div>
+          <h3>Personal details</h3>
+          <div className='row p-3'>
+            <TextField value={resumeDetails.fullname} onChange={e => setResumeDetails({ ...resumeDetails,fullname: e.target.value })} id="standard-basic-fullname" label="Full Name" variant="standard" />
+            <TextField id="standard-basic-loc" value={resumeDetails.location} onChange={e => setResumeDetails({ ...resumeDetails,location: e.target.value })} label="Location" variant="standard" />
 
-        <FormControl variant="standard">
-        <InputLabel id="demo-simple-select-label">Choose Job Title</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label="job"
-        >
-          <MenuItem value={'job'}>job</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-       </div>
-    </div>
-   
-  ) 
-    break;
-      case 1: return(
-    <div>
-      <h3>Contact Details</h3>
-      <div className="row p-3">
-         <TextField className='' id="standard-basic-email" label="Email" variant="standard" />
-       <TextField className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
-        <TextField className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
-       <TextField className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
-      </div>
-    </div>
-  ) 
-    break;
+            <FormControl variant="standard">
+              <InputLabel  id="demo-simple-select-label">Choose Job Title</InputLabel>
+              <Select defaultValue={""} onChange={e => setResumeDetails({ ...resumeDetails,job: e.target.value })}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="job"
+              >
+                 {
 
-      case 2: return(
-    <div>
-      <h3>Educational Details</h3>
-      <div className="row p-3">
-        <TextField className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
-        <TextField className='' id="standard-basic-college" label="University/College Name" variant="standard" />
-       <TextField className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
-      </div>
-    </div>
-  ) 
-    break;
+                jobRole.jobRoles.map(job=>(
+                  <MenuItem key={job} value={job}>{job}</MenuItem>
+                ))
+                 }
+                
+               
+                
+              </Select>
+            </FormControl>
+          </div>
+        </div>
 
-      case 3: return(
-    <div>
-      <p>Our AI generate skills & summary according to your job role . Click the <b>Generate AI skills & summary </b>Button to proceed</p>
-    </div>
-  ) 
-    break;
+      )
+        break;
+      case 1: return (
+        <div>
+          <h3>Contact Details</h3>
+          <div className="row p-3">
+            <TextField value={resumeDetails.email} onChange={e => setResumeDetails({ ...resumeDetails,email: e.target.value })} className='' id="standard-basic-email" label="Email" variant="standard" />
+            <TextField value={resumeDetails.phone} onChange={e => setResumeDetails({ ...resumeDetails,phone: e.target.value })} className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
+            <TextField value={resumeDetails.linkedin} onChange={e => setResumeDetails({ ...resumeDetails,linkedin: e.target.value })} className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
+            <TextField value={resumeDetails.github} onChange={e => setResumeDetails({ ...resumeDetails,github: e.target.value })} className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
+          </div>
+        </div>
+      )
+        break;
 
-  default: return null
-    break;
-}
+      case 2: return (
+        <div>
+          <h3>Educational Details</h3>
+          <div className="row p-3">
+            <TextField value={resumeDetails.degree} onChange={e => setResumeDetails({ ...resumeDetails,degree: e.target.value })} className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
+            <TextField value={resumeDetails.college} onChange={e => setResumeDetails({ ...resumeDetails,college: e.target.value })} className='' id="standard-basic-college" label="University/College Name" variant="standard" />
+            <TextField value={resumeDetails.year} onChange={e => setResumeDetails({ ...resumeDetails,year: e.target.value })} className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
+          </div>
+        </div>
+      )
+        break;
 
-}
+      case 3: return (
+        <div>
+          <p>Our AI generate skills & summary according to your job role . Click the <b>Generate AI skills & summary </b>Button to proceed</p>
+        </div>
+      )
+        break;
+
+      default: return null
+        break;
+    }
+
+  }
+  const generateSkillsSummary = () => {
+    setResumeDetails({...resumeDetails,skills:jobSkills[resumeDetails.job],summary:summaries[resumeDetails.job]})
+    handleNext()
+  }
   return (
     <Box sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
@@ -121,12 +140,12 @@ switch (stepCount) {
           <Box>
             {/* render form according to the active step */}
             {
-            renderFormCount(activeStep)
+              renderFormCount(activeStep)
 
-            
+
             }
 
-            
+
 
 
 
@@ -149,7 +168,7 @@ switch (stepCount) {
 
             {activeStep === steps.length - 1
               ?
-              <Button>GENERATE AI SKILLS & SUMMARY</Button>
+              <Button onClick={generateSkillsSummary}>GENERATE AI SKILLS & SUMMARY</Button>
 
               : <Button onClick={handleNext}>NEXT</Button>}
 
