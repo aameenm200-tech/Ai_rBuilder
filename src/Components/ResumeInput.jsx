@@ -13,6 +13,9 @@ import Select from '@mui/material/Select';
 import jobRole from '../assets/jobRole.json'
 import jobSkills from '../assets/jobSkills.json'
 import summaries from '../assets/summaries.json'
+import { toast } from 'react-toastify';
+import { saveResumeApi } from '../service/apiService';
+import { useNavigate } from 'react-router-dom';
 
 
 const steps = ['Basic Informations', 'Contact Details', 'Education Details', 'Review & Submit'];
@@ -22,8 +25,9 @@ const steps = ['Basic Informations', 'Contact Details', 'Education Details', 'Re
 
 function ResumeInput({resumeDetails, setResumeDetails}) {
 
+  const navigate = useNavigate()
 
-  console.log(resumeDetails);
+  // console.log(resumeDetails);
 
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -105,10 +109,36 @@ function ResumeInput({resumeDetails, setResumeDetails}) {
     }
 
   }
+
+
+
   const generateSkillsSummary = () => {
     setResumeDetails({...resumeDetails,skills:jobSkills[resumeDetails.job],summary:summaries[resumeDetails.job]})
     handleNext()
   }
+
+  const handleSaveResume = async () => {
+    // make api call to save resume whenever the finish button click
+    const {fullname,location,job,phone,email,github,linkedin,degree,college,year,skills,summary} = resumeDetails
+
+    if (fullname && location && job && phone && email && phone && email && github && linkedin && degree && college && year && skills.length>0 && summary) {
+      // make api call
+      const response = await saveResumeApi(resumeDetails)
+      console.log(response);
+      if (response.status===201){
+        toast.success("Resume Added Successfully")
+        const resumeId = response.data.id
+        navigate(`/resume/${resumeId}`)
+        
+      }
+
+    } else {
+      toast.error("Please Fill the Form Completely !!!")
+    }
+  }
+
+
+
   return (
     <Box sx={{ width: '100%' }}>
       <Stepper activeStep={activeStep}>
@@ -129,7 +159,7 @@ function ResumeInput({resumeDetails, setResumeDetails}) {
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button >
+            <Button onClick={handleSaveResume} >
               FINISH
             </Button>
           </Box>
