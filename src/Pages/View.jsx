@@ -46,9 +46,9 @@ getResumeDetails()
             {/* edit */}
             <Edit/>
             {/* all resumes */}
-            <Link to={'/all-resumes'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><IoDocument className='fs-4' /> All Resumes</Link>
+            {/* <Link to={'/all-resumes'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><IoDocument className='fs-4' /> All Resumes</Link> */}
             {/* download history */}
-             <Link to={'/download'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><GoHistory className='fs-4' /> Download History</Link>
+             {/* <Link to={'/download'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><GoHistory className='fs-4' /> Download History</Link> */}
             {/* back */}
              <Link to={'/resume-details'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><GrLinkPrevious className='fs-4' /> Previous</Link>
           </div>
