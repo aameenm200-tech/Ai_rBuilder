@@ -44,7 +44,7 @@ getResumeDetails()
             {/* Downloads */}
             <button style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><FiDownload  className='fs-4' /> Download CV</button>
             {/* edit */}
-            <Edit/>
+            <Edit resumeDetails={resume}  setResumeDetails={setResume} />
             {/* all resumes */}
             {/* <Link to={'/all-resumes'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><IoDocument className='fs-4' /> All Resumes</Link> */}
             {/* download history */}

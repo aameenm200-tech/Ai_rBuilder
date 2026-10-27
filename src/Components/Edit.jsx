@@ -10,6 +10,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { IoIosCloseCircle } from "react-icons/io";
+import jobRole from '../assets/jobRole.json'
+import { toast } from 'react-toastify';
+
 
 const style = {
   position: 'absolute',
@@ -17,18 +20,38 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 700,
-  maxHeight:'80vh',
-  overflowY:'auto',
+  maxHeight: '80vh',
+  overflowY: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 };
 
-function Edit() {
+function Edit({ resumeDetails, setResumeDetails }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const skillRef = React.useRef()
+
+  const removeSkill = (skill)=>{
+    setResumeDetails({...resumeDetails, skills:resumeDetails.skills.filter(item=>item!=skill)})
+  }
+
+
+  const addSkill = (skill)=>{
+if(skill){
+if(resumeDetails?.skills?.map(item=>item.toLowerCase()).includes(skill.toLowerCase())){
+toast.info("given skill is already added , please add another skill")
+}else{
+setResumeDetails({...resumeDetails,skills:[...resumeDetails?.skills,skill]})
+}
+skillRef.current.value = ""
+}else{
+  toast.warning("please enter a valid input")
+}
+  }
+  
   return (
     <div>
       <button style={{ backgroundColor: '#a5a37d' }} className='btn mx-2' onClick={handleOpen}><FaRegEdit className='fs-4' /> Edit CV</button>
@@ -47,19 +70,25 @@ function Edit() {
             <div>
               <h3>Personal details</h3>
               <div className='row p-3'>
-                <TextField id="standard-basic-fullname" label="Full Name" variant="standard" />
-                <TextField id="standard-basic-loc" label="Location" variant="standard" />
+                <TextField value={resumeDetails?.fullname} onChange={e => setResumeDetails({ ...resumeDetails, fullname: e.target.value })} id="standard-basic-fullname" label="Full Name" variant="standard" />
+                <TextField id="standard-basic-loc" value={resumeDetails?.location} onChange={e => setResumeDetails({ ...resumeDetails, location: e.target.value })} label="Location" variant="standard" />
 
                 <FormControl variant="standard">
                   <InputLabel id="demo-simple-select-label">Choose Job Title</InputLabel>
-                  <Select
+                  <Select defaultValue={resumeDetails?.job} onChange={e => setResumeDetails({ ...resumeDetails, job: e.target.value })}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     label="job"
                   >
-                    <MenuItem value={'job'}>job</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    {
+
+                      jobRole.jobRoles.map(job => (
+                        <MenuItem key={job} value={job}>{job}</MenuItem>
+                      ))
+                    }
+
+
+
                   </Select>
                 </FormControl>
               </div>
@@ -68,38 +97,43 @@ function Edit() {
             <div>
               <h3>Contact Details</h3>
               <div className="row p-3">
-                <TextField className='' id="standard-basic-email" label="Email" variant="standard" />
-                <TextField className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
-                <TextField className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
-                <TextField className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
+                <TextField value={resumeDetails?.email} onChange={e => setResumeDetails({ ...resumeDetails, email: e.target.value })} className='' id="standard-basic-email" label="Email" variant="standard" />
+                <TextField value={resumeDetails?.phone} onChange={e => setResumeDetails({ ...resumeDetails, phone: e.target.value })} className='mb-2' id="standard-basic-contact" label="Contact Number" variant="standard" />
+                <TextField value={resumeDetails?.linkedin} onChange={e => setResumeDetails({ ...resumeDetails, linkedin: e.target.value })} className='' id="standard-basic-linkedin" label="LinkedIn Link" variant="standard" />
+                <TextField value={resumeDetails?.github} onChange={e => setResumeDetails({ ...resumeDetails, github: e.target.value })} className='mb-2' id="standard-basic-github" label="Github Link" variant="standard" />
               </div>
             </div>
             {/* education details */}
             <div>
               <h3>Educational Details</h3>
               <div className="row p-3">
-                <TextField className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
-                <TextField className='' id="standard-basic-college" label="University/College Name" variant="standard" />
-                <TextField className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
+                <TextField value={resumeDetails?.degree} onChange={e => setResumeDetails({ ...resumeDetails, degree: e.target.value })} className='mb-2' id="standard-basic-degree" label="Bachelor's Degree" variant="standard" />
+                <TextField value={resumeDetails?.college} onChange={e => setResumeDetails({ ...resumeDetails, college: e.target.value })} className='' id="standard-basic-college" label="University/College Name" variant="standard" />
+                <TextField value={resumeDetails?.year} onChange={e => setResumeDetails({ ...resumeDetails, year: e.target.value })} className='mb-2' id="standard-basic-year" label="Year of Graduation" variant="standard" />
               </div>
             </div>
             {/* skills */}
             <div>
               <h3>Skills</h3>
               <div className='d-flex'>
-                <input type="text" placeholder='Add Skills' className='form-control' />
-                <button className=' btn w-25 mx-2 text-primary '>ADD</button>
+                <input ref={skillRef} type="text" placeholder='Add Skills' className='form-control' />
+                <button onClick={()=>{addSkill(skillRef.current.value)}} className=' btn w-25 mx-2 text-primary '>ADD</button>
               </div>
               <h5 className='my-3'>Added Skills </h5>
               <div className="d-flex justify-content-between flex-wrap">
-                <Button style={{ backgroundColor: '#a5a37d' }}  variant='contained'>Skills <IoIosCloseCircle className='ms-2 fs-4' /></Button>
+                {
+                  resumeDetails?.skills?.map(skill => (
+                    <Button onClick={()=>{removeSkill(skill)}} className='mb-3' style={{ backgroundColor: '#a5a37d' }} variant='contained'>{skill} <IoIosCloseCircle className='ms-2 fs-4' /></Button>
+                  ))
+                }
+
               </div>
             </div>
             {/* summary */}
             <div>
               <h3 className='mt-2'>Summary</h3>
               <div className='row p-3'>
-                <TextField id='summary' variant='standard' label='summary'></TextField>
+                <TextField value={resumeDetails?.summary} onChange={e => setResumeDetails({...resumeDetails, summary: e.target.value})} id='summary' multiline variant='standard' label='summary'></TextField>
               </div>
             </div>
             {/* update button */}
