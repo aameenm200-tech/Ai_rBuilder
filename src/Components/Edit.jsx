@@ -12,6 +12,9 @@ import Select from '@mui/material/Select';
 import { IoIosCloseCircle } from "react-icons/io";
 import jobRole from '../assets/jobRole.json'
 import { toast } from 'react-toastify';
+import { editAllResumesApi } from '../service/apiService';
+import { jsPDF } from "jspdf";
+
 
 
 const style = {
@@ -34,24 +37,48 @@ function Edit({ resumeDetails, setResumeDetails }) {
   const handleClose = () => setOpen(false);
   const skillRef = React.useRef()
 
-  const removeSkill = (skill)=>{
-    setResumeDetails({...resumeDetails, skills:resumeDetails.skills.filter(item=>item!=skill)})
+  const removeSkill = (skill) => {
+    setResumeDetails({ ...resumeDetails, skills: resumeDetails.skills.filter(item => item != skill) })
   }
 
 
-  const addSkill = (skill)=>{
-if(skill){
-if(resumeDetails?.skills?.map(item=>item.toLowerCase()).includes(skill.toLowerCase())){
-toast.info("given skill is already added , please add another skill")
-}else{
-setResumeDetails({...resumeDetails,skills:[...resumeDetails?.skills,skill]})
-}
-skillRef.current.value = ""
-}else{
-  toast.warning("please enter a valid input")
-}
+  const addSkill = (skill) => {
+    if (skill) {
+      if (resumeDetails?.skills?.map(item => item.toLowerCase()).includes(skill.toLowerCase())) {
+        toast.info("given skill is already added , please add another skill")
+      } else {
+        setResumeDetails({ ...resumeDetails, skills: [...resumeDetails?.skills, skill] })
+      }
+      skillRef.current.value = ""
+    } else {
+      toast.warning("please enter a valid input")
+    }
   }
-  
+
+
+  const handleEditResume = async () => {
+    // make api call to update resume whenever the update button click
+    const { fullname, location, job, phone, email, github, linkedin, degree, college, year, skills, summary } = resumeDetails
+
+    if (fullname && location && job && phone && email && phone && email && github && linkedin && degree && college && year && skills.length > 0 && summary) {
+      // make api call
+      const response = await editAllResumesApi(resumeDetails.id, resumeDetails)
+      // console.log(response);
+      if (response.status === 200) {
+        toast.success("Resume Updated Successfully")
+        setTimeout(() => {
+          handleClose()
+        }, 2500)
+
+
+      }
+
+    } else {
+      toast.error("Please Fill the Form Completely !!!")
+    }
+  }
+
+
   return (
     <div>
       <button style={{ backgroundColor: '#a5a37d' }} className='btn mx-2' onClick={handleOpen}><FaRegEdit className='fs-4' /> Edit CV</button>
@@ -117,13 +144,13 @@ skillRef.current.value = ""
               <h3>Skills</h3>
               <div className='d-flex'>
                 <input ref={skillRef} type="text" placeholder='Add Skills' className='form-control' />
-                <button onClick={()=>{addSkill(skillRef.current.value)}} className=' btn w-25 mx-2 text-primary '>ADD</button>
+                <button onClick={() => { addSkill(skillRef.current.value) }} className=' btn w-25 mx-2 text-primary '>ADD</button>
               </div>
               <h5 className='my-3'>Added Skills </h5>
               <div className="d-flex justify-content-between flex-wrap">
                 {
                   resumeDetails?.skills?.map(skill => (
-                    <Button onClick={()=>{removeSkill(skill)}} className='mb-3' style={{ backgroundColor: '#a5a37d' }} variant='contained'>{skill} <IoIosCloseCircle className='ms-2 fs-4' /></Button>
+                    <Button onClick={() => { removeSkill(skill) }} className='mb-3' style={{ backgroundColor: '#a5a37d' }} variant='contained'>{skill} <IoIosCloseCircle className='ms-2 fs-4' /></Button>
                   ))
                 }
 
@@ -133,11 +160,11 @@ skillRef.current.value = ""
             <div>
               <h3 className='mt-2'>Summary</h3>
               <div className='row p-3'>
-                <TextField value={resumeDetails?.summary} onChange={e => setResumeDetails({...resumeDetails, summary: e.target.value})} id='summary' multiline variant='standard' label='summary'></TextField>
+                <TextField value={resumeDetails?.summary} onChange={e => setResumeDetails({ ...resumeDetails, summary: e.target.value })} id='summary' multiline variant='standard' label='summary'></TextField>
               </div>
             </div>
             {/* update button */}
-            <button className='btn btn-success mt-3'>Update CV</button>
+            <button onClick={handleEditResume} className='btn btn-success mt-3'>Update CV</button>
           </Box>
         </Box>
       </Modal>

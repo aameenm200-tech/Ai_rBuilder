@@ -32,3 +32,9 @@ export const deleteResumeApi = async (resumeId) => {
    return await axiosService("DELETE",`/resumes/${resumeId}`,{})
 
 }
+
+// update resumes API : called by edit component when update button clicks
+
+export const editAllResumesApi = async (resumeId,resumeDetails) =>{
+   return await axiosService("PUT",`/resumes/${resumeId}`,resumeDetails)
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FiDownload } from "react-icons/fi";
 import  Edit  from "../Components/Edit";
 import { Link, useParams } from 'react-router-dom';
@@ -7,6 +7,8 @@ import { IoDocument } from "react-icons/io5";
 import { GoHistory } from "react-icons/go";
 import { GrLinkPrevious } from "react-icons/gr";
 import { viewResumeApi } from '../service/apiService';
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas';
 
 
 
@@ -15,6 +17,7 @@ function View() {
 
 
   const [resume,setResume] = useState()
+  const previewRef = useRef()
 
 
   const {id} = useParams()
@@ -33,6 +36,18 @@ getResumeDetails()
     
   }
 
+  
+  const generatePDF = async () =>{
+    const previewTag = previewRef.current
+    const canvas = await html2canvas(previewTag)
+    const pdf = new jsPDF()
+    const imageHeight = pdf.internal.pageSize.getHeight()
+    const imagewidth = pdf.internal.pageSize.getWidth()
+  pdf.addImage(canvas,"PNG",0,0,imageHeight,imagewidth)
+  pdf.save("resume.pdf")
+    
+  }
+
 
   return (
     <div className='container my-5'>
@@ -42,7 +57,7 @@ getResumeDetails()
           {/* navigation icons */}
           <div className="d-flex justify-content-center align-items-center">
             {/* Downloads */}
-            <button style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><FiDownload  className='fs-4' /> Download CV</button>
+            <button onClick={generatePDF} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><FiDownload  className='fs-4' /> Download CV</button>
             {/* edit */}
             <Edit resumeDetails={resume}  setResumeDetails={setResume} />
             {/* all resumes */}
@@ -52,7 +67,7 @@ getResumeDetails()
             {/* back */}
              <Link to={'/resume-details'} style={{backgroundColor:"#a5a37d"}} className='btn mx-2'><GrLinkPrevious className='fs-4' /> Previous</Link>
           </div>
-          <div className='p-5'>
+          <div ref={previewRef} className='p-5'>
             <Preview resumeDetails={resume}/>
           </div>
 
