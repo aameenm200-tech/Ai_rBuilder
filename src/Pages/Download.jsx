@@ -2,14 +2,53 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IoArrowBackOutline } from "react-icons/io5";
 import { getdownloadResumesApi } from '../service/apiService';
-import { resume } from 'react-dom/server';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 
 
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 700,
+  maxHeight: '80vh',
+  overflowY: 'auto',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function Download() {
 
+   const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
   const [downloadList, setdownloadList] = useState([])
-  console.log(downloadList);
+  const [label,setLabel] = useState([])
+  const [value,setValue] = useState([])
+const colorPallete = ['#8ec8e7','#f7f2ef','#f6dda5','#bb7a44','#bb6742','#331803']
+const backgroundColor = label.map((value,index)=>colorPallete[index%colorPallete.length])
+
+const data = {
+  labels:label,
+  datasets:[
+    {
+      label: 'Download Count',
+      data: value,
+      backgroundColor
+
+    }
+  ]
+}
 
 
   useEffect(() => {
@@ -19,13 +58,26 @@ function Download() {
   const getAlldownloads = async () => {
     const result = await getdownloadResumesApi()
     setdownloadList(result.data)
+    const output = {}
+    result.data.forEach(item=>{
+      const currentJob = item.jobRole
+      if(currentJob in output){
+        output[currentJob] += 1
+      }else{
+        output[currentJob] = 1
+      }
+    })
+    setLabel(Object.keys(output))
+    setValue(Object.values(output))
   }
   return (
     <div className="container my-5">
       <div className="d-flex justify-content-between align-items-center">
         <h3 className='fs-1'>Downloaded Resume History</h3>
-        <Link to={'/resume-details'} className='text-decoration-none fs-5'><IoArrowBackOutline />Back</Link>
+        <button onClick={handleOpen} className='btn text-light' style={{backgroundColor:"#564e3b"}}>View in chart</button>
       </div>
+
+      <p className='mt-3 fs-3 fw-semibold text-primary'>Total Downloaded Resume : <span className='fw-bold text-danger'>{downloadList.length}</span></p>
       <div className="row my-5">
         {/* duplicate the row according to resume count */}
 
@@ -48,6 +100,27 @@ function Download() {
         }
 
       </div>
+
+      {/* modal  */}
+
+      <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{backgroundColor:"#564e3b" , width:"100%",padding:"10px", color:"white"}}>
+      CV Count by job role
+    </Typography>
+    <div className="d-flex justify-content-center align-items-center">
+      <Pie data={data} />
+    </div>
+    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+      This chart provides an overview of the number of CV downloads associated with different jobs on the website. it helps visualize the demand and engagement for CV's accross various career categories, making it easier to identify which job roles attract the highest number of downloads. by comparing downloads count accross roles, the chart can provide useful insights in to users preferences and the popularity of different career oppertunities on the platform
+    </Typography>
+  </Box>
+</Modal>
 
     </div>
   )
